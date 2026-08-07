@@ -1,0 +1,18 @@
+# Compilations et dépendances
+backend/target/
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# IDE et système
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Données locales et sauvegardes sensibles
+backups/
+GENEALOGIE_SIMPLIFIE.doc
+*.log
+.env
+.env.*

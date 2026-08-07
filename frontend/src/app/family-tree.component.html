@@ -1,0 +1,40 @@
+<div class="family-canvas" *ngIf="activePerson() as rootPerson">
+  <ng-container *ngTemplateOutlet="personLevel; context: {$implicit: rootPerson}"></ng-container>
+</div>
+
+<ng-template #personLevel let-person>
+  <div class="person-level">
+    <div class="union-list">
+      <div class="union-branch" *ngFor="let union of unionsFor(person)">
+        <div class="couple-card">
+          <button class="member" [class.deceased]="union.person.deathDate" (click)="select(union.person)">
+            <span class="avatar"><img *ngIf="union.person.photoUrl" [src]="union.person.photoUrl" [alt]="displayName(union.person)" /><span *ngIf="!union.person.photoUrl">{{initials(union.person)}}</span><i *ngIf="union.person.deathDate" title="Personne décédée">†</i></span>
+            <span class="person-name"><b>{{union.person.lastName}}</b><strong>{{union.person.firstName}}</strong><small>{{year(union.person.birthDate)}} — {{union.person.deathDate?year(union.person.deathDate):'aujourd’hui'}}</small></span>
+          </button>
+          <span class="heart" *ngIf="union.partner">♡</span>
+          <button class="member partner" *ngIf="union.partner" [class.deceased]="union.partner.deathDate" (click)="select(union.partner)">
+            <span class="avatar partner-avatar"><img *ngIf="union.partner.photoUrl" [src]="union.partner.photoUrl" [alt]="displayName(union.partner)" /><span *ngIf="!union.partner.photoUrl">{{initials(union.partner)}}</span><i *ngIf="union.partner.deathDate" title="Personne décédée">†</i></span>
+            <span class="person-name"><b>{{union.partner.lastName}}</b><strong>{{union.partner.firstName}}</strong><small>{{year(union.partner.birthDate)}} — {{union.partner.deathDate?year(union.partner.deathDate):'aujourd’hui'}}</small></span>
+          </button>
+          <span class="unknown" *ngIf="union.label">{{union.label}}</span>
+          <button class="toggle" *ngIf="union.children.length" (click)="toggle(union.key,$event)">{{isExpanded(union.key)?'−':'+'}}</button>
+        </div>
+
+        <div class="children" *ngIf="union.children.length && isExpanded(union.key)">
+          <div class="child" *ngFor="let child of union.children" [class.search-target]="child.id===focusPersonId" [attr.data-person-id]="child.id">
+            <div class="child-person">
+            <button class="child-card" [class.deceased]="child.deathDate" (click)="select(child)">
+              <span class="avatar"><img *ngIf="child.photoUrl" [src]="child.photoUrl" [alt]="displayName(child)" /><span *ngIf="!child.photoUrl">{{initials(child)}}</span><i *ngIf="child.deathDate" title="Personne décédée">†</i></span>
+              <span class="person-name"><b>{{child.lastName}}</b><strong>{{child.firstName}}</strong><small>{{year(child.birthDate)}} — {{child.deathDate?year(child.deathDate):'aujourd’hui'}}</small></span>
+            </button>
+            <button class="child-toggle" *ngIf="canOpen(child)" (click)="focusOn(child,$event)" [attr.aria-label]="isPersonExpanded(child)?'Replier la descendance':'Afficher la descendance'">{{isPersonExpanded(child)?'−':'+'}}</button>
+            </div>
+            <div class="descendant-branch" *ngIf="isPersonExpanded(child)">
+              <ng-container *ngTemplateOutlet="personLevel; context: {$implicit: child}"></ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

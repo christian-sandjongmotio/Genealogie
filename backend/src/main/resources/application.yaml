@@ -1,0 +1,11 @@
+spring:
+  application.name: memoire-familiale
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/genealogie}
+    username: ${DATABASE_USER:genealogie}
+    password: ${DATABASE_PASSWORD:genealogie}
+  jpa:
+    hibernate.ddl-auto: validate
+    open-in-view: false
+  flyway.enabled: true
+server.port: ${SERVER_PORT:8091}
