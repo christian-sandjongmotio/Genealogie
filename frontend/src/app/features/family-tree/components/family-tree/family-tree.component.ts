@@ -1,19 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, inject, signal } from '@angular/core';
+import { Person } from '../../../../shared/models/person.model';
 
-export interface FamilyPerson {
-  id?: number;
-  firstName: string;
-  lastName: string;
-  birthDate?: string;
-  deathDate?: string;
-  photoUrl?: string;
-  fatherId?: number;
-  motherId?: number;
-  spouseId?: number;
-  parentId?: number;
-  sourceReference?: string;
-}
+type FamilyPerson = Person;
 interface Union {
   key: string;
   person: FamilyPerson;
